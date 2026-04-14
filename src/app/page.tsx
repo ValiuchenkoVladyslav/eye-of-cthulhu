@@ -1,18 +1,26 @@
+import { Suspense } from "react";
 import { rpc } from "~/lib/rpc";
 
-export const dynamic = "force-dynamic";
-
-export default async function Home() {
-   const planets = await rpc.planet.list({
-      limit: 10,
-      cursor: 0,
-   });
+async function EventList() {
+   const events = await rpc.getEvents();
 
    return (
       <div className="flex flex-col gap-2">
-         {planets.map((planet) => (
-            <div key={planet.id}>{planet.name}</div>
+         {events.map((event) => (
+            <div key={event.id}>{event.timestamp.toISOString()}</div>
          ))}
+      </div>
+   );
+}
+
+export default function Home() {
+   return (
+      <div>
+         <h1>activity events</h1>
+
+         <Suspense fallback={<p>loading...</p>}>
+            <EventList />
+         </Suspense>
       </div>
    );
 }
