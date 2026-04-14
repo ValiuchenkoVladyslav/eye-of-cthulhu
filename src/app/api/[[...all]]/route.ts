@@ -2,7 +2,6 @@
 
 import { onError } from "@orpc/server";
 import { RPCHandler } from "@orpc/server/fetch";
-import { headers } from "next/headers";
 
 import { router } from "./router";
 
@@ -15,13 +14,7 @@ const handler = new RPCHandler(router, {
 });
 
 async function handle(request: Request) {
-   // todo validate auth here
-   const _reqHeaders = await headers();
-
-   const { response } = await handler.handle(request, {
-      prefix: "/",
-      context: {},
-   });
+   const { response } = await handler.handle(request);
 
    return response ?? new Response("Not found", { status: 404 });
 }

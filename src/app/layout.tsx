@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 
 // https://orpc.dev/docs/adapters/next
 import "~/setup-server-rpc";
@@ -12,7 +13,13 @@ export const metadata: Metadata = {
 export default function RootLayout(props: React.PropsWithChildren) {
    return (
       <html lang="en">
-         <body className="min-h-screen antialiased">{props.children}</body>
+         <body className="min-h-screen antialiased">
+            <header className="sticky top-0 flex gap-2">
+               <Link href="/">home</Link>
+            </header>
+
+            <main>{props.children}</main>
+         </body>
       </html>
    );
 }

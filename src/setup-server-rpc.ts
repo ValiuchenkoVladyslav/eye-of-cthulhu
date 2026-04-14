@@ -3,14 +3,14 @@
 import "server-only";
 
 import { createRouterClient } from "@orpc/server";
-import { headers } from "next/headers";
+import { connection } from "next/server";
 
 import { router } from "~/app/api/[[...all]]/router";
 
 globalThis.$rpc = createRouterClient(router, {
    async context() {
-      // todo validate auth here
-      const _reqHeaders = await headers();
+      // force dynamic rendering
+      await connection();
 
       return {};
    },

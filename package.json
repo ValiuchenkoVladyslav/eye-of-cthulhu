@@ -13,6 +13,7 @@
       "prepare": "husky"
    },
    "dependencies": {
+      "@noble/ciphers": "^2.2.0",
       "@orpc/client": "^1.13.14",
       "@orpc/server": "^1.13.14",
       "@vercel/functions": "^3.4.3",
