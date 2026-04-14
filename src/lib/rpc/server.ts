@@ -1,15 +1,13 @@
-//! https://orpc.dev/docs/adapters/next
-
 import "server-only";
 
 import { createRouterClient } from "@orpc/server";
 import { connection } from "next/server";
 
-import { router } from "~/app/api/[[...all]]/router";
+import { router } from "../../app/api/[[...]]/router";
 
-globalThis.$rpc = createRouterClient(router, {
+export const rpc = createRouterClient(router, {
    async context() {
-      // force dynamic rendering
+      // force dynamic rendering for everything
       await connection();
 
       return {};
