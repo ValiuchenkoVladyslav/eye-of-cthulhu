@@ -1,0 +1,20 @@
+# dependencies
+node_modules/
+
+# next.js
+.next/
+next-env.d.ts
+
+# misc
+.DS_Store
+*.pem
+
+# env files (can opt-in for committing if needed)
+.env*
+!.env.example
+
+# vercel
+.vercel/
+
+# typescript
+*.tsbuildinfo

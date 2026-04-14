@@ -1,0 +1,3 @@
+bun biome check --write --no-errors-on-unmatched $(git diff --cached --name-only --diff-filter=ACMR)
+
+git update-index --again
