@@ -1,0 +1,34 @@
+//! https://orpc.dev/docs/adapters/next
+
+import { onError } from "@orpc/server";
+import { RPCHandler } from "@orpc/server/fetch";
+import { headers } from "next/headers";
+
+import { router } from "./router";
+
+const handler = new RPCHandler(router, {
+   interceptors: [
+      onError((error) => {
+         console.error(error);
+      }),
+   ],
+});
+
+async function handle(request: Request) {
+   // todo validate auth here
+   const _reqHeaders = await headers();
+
+   const { response } = await handler.handle(request, {
+      prefix: "/",
+      context: {},
+   });
+
+   return response ?? new Response("Not found", { status: 404 });
+}
+
+export const HEAD = handle;
+export const GET = handle;
+export const POST = handle;
+export const PUT = handle;
+export const PATCH = handle;
+export const DELETE = handle;
