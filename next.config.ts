@@ -1,5 +1,7 @@
 import type { NextConfig } from "next";
 
 export default {
-   /* config options here */
+   experimental: {
+      authInterrupts: true,
+   },
 } satisfies NextConfig;

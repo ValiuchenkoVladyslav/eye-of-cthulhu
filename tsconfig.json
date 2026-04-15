@@ -19,8 +19,9 @@
          }
       ],
       "paths": {
-         "~/*": ["./src/*"]
-      }
+         "~/*": ["./src/lib/*"]
+      },
+      "types": ["bun-types"]
    },
    "include": [
       "next-env.d.ts",

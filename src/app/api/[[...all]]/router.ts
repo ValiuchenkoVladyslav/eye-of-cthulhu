@@ -1,8 +1,8 @@
 import type { RouterClient } from "@orpc/server";
-import { activityEvents, db } from "~/lib/db";
-import { os } from "./os";
+import { pos } from "~/auth";
+import { activityEvents, db } from "~/db";
 
-export const getEvents = os.handler(async () => {
+export const getEvents = pos.handler(async () => {
    const events = await db.select().from(activityEvents);
 
    return events;

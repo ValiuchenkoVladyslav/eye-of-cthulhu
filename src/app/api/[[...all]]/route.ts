@@ -1,5 +1,3 @@
-//! https://orpc.dev/docs/adapters/next
-
 import { onError } from "@orpc/server";
 import { RPCHandler } from "@orpc/server/fetch";
 
@@ -14,7 +12,9 @@ const handler = new RPCHandler(router, {
 });
 
 async function handle(request: Request) {
-   const { response } = await handler.handle(request);
+   const { response } = await handler.handle(request, {
+      prefix: "/api",
+   });
 
    return response ?? new Response("Not found", { status: 404 });
 }

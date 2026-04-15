@@ -1,8 +1,12 @@
 import { Suspense } from "react";
-import { rpc } from "~/lib/rpc";
 
 async function EventList() {
-   const events = await rpc.getEvents();
+   const events = await Promise.resolve([
+      {
+         id: "ID",
+         timestamp: new Date(),
+      },
+   ]);
 
    return (
       <div className="flex flex-col gap-2">
