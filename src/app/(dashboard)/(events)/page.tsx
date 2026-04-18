@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import type { EventBucketSize } from "~/db/ch";
 import { getEventBuckets, getProcessLogs, getRecentIncidents } from "./actions";
 import { EventBarChart } from "./event-bar-chart";
-import { ProcessLogsSidebar } from "./process-logs-sidebar";
+import { ProcessLogs } from "./process-logs";
 import { RecentIncidents } from "./recent-incidents";
 
 async function EventsChart(props: {
@@ -40,39 +40,26 @@ async function IncidentsWorkspace(props: {
          : searchParams.process?.[0];
 
    return (
-      <div className="flex gap-2">
-         <div className="w-86 bg-sc rounded-xl flex flex-col gap-3 p-3">
-            <div>
-               <h1>Recent incidents</h1>
-               <p className="text-sm text-white/65">
-                  Select an incident to inspect every log from that process.
-               </p>
-            </div>
+      <div className="flex gap-2 h-screen *:h-screen">
+         <div className="overflow-y-scroll w-86 bg-sc rounded-xl flex flex-col gap-3 p-3">
+            <h1>Recent incidents</h1>
 
-            <Suspense fallback={<p>loading...</p>}>
-               <RecentIncidents
-                  incidents={getRecentIncidents()}
-                  selectedProcess={selectedProcess}
-               />
-            </Suspense>
+            <RecentIncidents
+               incidents={getRecentIncidents()}
+               selectedProcess={selectedProcess}
+            />
          </div>
 
-         {selectedProcess ? (
-            <Suspense
-               fallback={
-                  <div className="flex-1 bg-sc rounded-xl p-3">loading...</div>
-               }
-            >
-               <ProcessLogsSidebar
+         <aside className="flex-1 bg-sc rounded-xl flex flex-col overflow-hidden">
+            {selectedProcess ? (
+               <ProcessLogs
                   process={selectedProcess}
                   logs={getProcessLogs(selectedProcess)}
                />
-            </Suspense>
-         ) : (
-            <aside className="flex-1 bg-sc rounded-xl hidden p-3 text-sm text-white/65 xl:block">
-               Pick an incident to open the process log sidebar.
-            </aside>
-         )}
+            ) : (
+               <p>Select an incident to open process logs.</p>
+            )}
+         </aside>
       </div>
    );
 }

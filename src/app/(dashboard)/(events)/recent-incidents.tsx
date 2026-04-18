@@ -14,54 +14,48 @@ export function RecentIncidents(props: {
    const searchParams = useSearchParams();
 
    function getIncidentHref(process: string) {
-      const nextSearchParams = new URLSearchParams(searchParams.toString());
+      const params = new URLSearchParams(searchParams.toString());
 
-      nextSearchParams.set("process", process);
+      params.set("process", process);
 
-      return `${pathname}?${nextSearchParams.toString()}`;
+      return `${pathname}?${params.toString()}`;
    }
 
    return (
-      <div className="flex flex-col gap-2">
+      <nav className="flex flex-col gap-2">
          {incidents.length === 0 && <h2>No records.</h2>}
 
          {incidents.map((incident) => (
             <Link
                key={incident.process}
                href={getIncidentHref(incident.process)}
-               className={`rounded-lg border p-3 duration-150 ${
+               className={`flex items-start justify-between gap-3 rounded-lg border p-3 duration-150 ${
                   props.selectedProcess === incident.process
                      ? "border-white/30 bg-white/10"
                      : "border-white/10 hover:border-white/20 hover:bg-white/5"
                }`}
             >
-               <div className="flex items-start justify-between gap-3">
-                  <div className="min-w-0">
-                     <p className="truncate font-medium">{incident.process}</p>
-                     <p className="text-sm text-white/65">
-                        First {formatTimestamp(incident.firstTimestamp)}
-                     </p>
-                     <p className="text-sm text-white/65">
-                        Last {formatTimestamp(incident.lastTimestamp)}
-                     </p>
-                  </div>
-
-                  <span
-                     className={`rounded-full px-2 py-1 text-xs font-semibold ${
-                        incident.type === "error"
-                           ? "bg-red-500/15 text-red-300"
-                           : "bg-yellow-500/15 text-yellow-200"
-                     }`}
-                  >
-                     {incident.type}
-                  </span>
+               <div className="min-w-0">
+                  <p className="truncate font-medium">{incident.process}</p>
+                  <p className="text-sm text-white/65">
+                     First {incident.firstTimestamp}
+                  </p>
+                  <p className="text-sm text-white/65">
+                     Last {incident.lastTimestamp}
+                  </p>
                </div>
+
+               <span
+                  className={`rounded-full px-2 py-1 text-xs font-semibold ${
+                     incident.type === "error"
+                        ? "bg-red-500/15 text-red-300"
+                        : "bg-yellow-500/15 text-yellow-200"
+                  }`}
+               >
+                  {incident.type}
+               </span>
             </Link>
          ))}
-      </div>
+      </nav>
    );
-}
-
-function formatTimestamp(timestamp: string) {
-   return new Date(timestamp).toLocaleString();
 }
