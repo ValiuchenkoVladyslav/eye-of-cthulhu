@@ -29,6 +29,7 @@ export function RecentIncidents(props: {
             <Link
                key={incident.process}
                href={getIncidentHref(incident.process)}
+               scroll={false}
                className={`flex items-start justify-between gap-3 rounded-lg border p-3 duration-150 ${
                   props.selectedProcess === incident.process
                      ? "border-white/30 bg-white/10"
