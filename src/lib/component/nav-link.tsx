@@ -8,11 +8,8 @@ export function NavLink({ href, ...props }: React.ComponentProps<typeof Link>) {
 
    const hrefStr = typeof href === "string" ? href : (href.pathname ?? "");
 
-   return (
-      <Link
-         href={href}
-         aria-current={pathname.startsWith(hrefStr) && "page"}
-         {...props}
-      />
-   );
+   const active =
+      hrefStr === "/" ? pathname === "/" : pathname.startsWith(hrefStr);
+
+   return <Link href={href} aria-current={active && "page"} {...props} />;
 }
