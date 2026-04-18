@@ -8,6 +8,7 @@ import { RecentIncidents } from "./recent-incidents";
 async function EventsChart(props: {
    searchParams: Promise<{
       bucket?: string | string[];
+      offset?: string | string[];
       process?: string | string[];
    }>;
 }) {
@@ -16,13 +17,17 @@ async function EventsChart(props: {
       typeof searchParams.bucket === "string"
          ? searchParams.bucket
          : searchParams.bucket?.[0];
+   const offset =
+      typeof searchParams.offset === "string"
+         ? searchParams.offset
+         : searchParams.offset?.[0];
    const bucketSize: EventBucketSize =
       bucket === "day" || bucket === "week" ? bucket : "hour";
 
    return (
       <EventBarChart
          bucketSize={bucketSize}
-         data={getEventBuckets(bucketSize)}
+         data={getEventBuckets(bucketSize, offset)}
       />
    );
 }
@@ -30,6 +35,7 @@ async function EventsChart(props: {
 async function IncidentsWorkspace(props: {
    searchParams: Promise<{
       bucket?: string | string[];
+      offset?: string | string[];
       process?: string | string[];
    }>;
 }) {
@@ -69,6 +75,7 @@ async function IncidentsWorkspace(props: {
 export default function EventsPage(props: {
    searchParams: Promise<{
       bucket?: string | string[];
+      offset?: string | string[];
       process?: string | string[];
    }>;
 }) {

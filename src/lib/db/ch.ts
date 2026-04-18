@@ -52,23 +52,42 @@ const incidentFilter = {
 
 const eventBucketConfig = {
    hour: {
-      bucket: "toStartOfHour(timestamp)",
-      label: "%d %b %H:00",
-      since: "now() - INTERVAL 24 HOUR",
+      bucket: "toDateTime(toStartOfHour(timestamp))",
+      label: "%H:00",
+      start: "toDateTime(toStartOfDay(now()))",
+      startFromOffset:
+         "toDateTime(toStartOfDay(parseDateTimeBestEffort({offset: String})))",
+      rangeEnd: "toDateTime(rangeStart + INTERVAL 24 HOUR)",
+      step: "toIntervalHour(1)",
    },
    day: {
-      bucket: "toStartOfDay(timestamp)",
-      label: "%d %b",
-      since: "now() - INTERVAL 14 DAY",
+      bucket: "toDateTime(toStartOfDay(timestamp))",
+      label: "%a %d",
+      start: "toDateTime(toStartOfWeek(now()))",
+      startFromOffset:
+         "toDateTime(toStartOfWeek(parseDateTimeBestEffort({offset: String})))",
+      rangeEnd: "toDateTime(rangeStart + INTERVAL 7 DAY)",
+      step: "toIntervalDay(1)",
    },
    week: {
-      bucket: "toStartOfWeek(timestamp)",
+      bucket: "toDateTime(toStartOfWeek(timestamp))",
       label: "%d %b",
-      since: "now() - INTERVAL 12 WEEK",
+      start: "toDateTime(toStartOfWeek(now()) - INTERVAL 11 WEEK)",
+      startFromOffset:
+         "toDateTime(toStartOfWeek(parseDateTimeBestEffort({offset: String})))",
+      rangeEnd: "toDateTime(rangeStart + INTERVAL 12 WEEK)",
+      step: "toIntervalWeek(1)",
    },
 } as const satisfies Record<
    EventBucketSize,
-   { bucket: string; label: string; since: string }
+   {
+      bucket: string;
+      label: string;
+      start: string;
+      startFromOffset: string;
+      rangeEnd: string;
+      step: string;
+   }
 >;
 
 async function selectRows<T>(
@@ -161,16 +180,23 @@ export async function selectProcessLogs(process: string) {
    );
 }
 
-export async function selectEventBuckets(bucketSize: EventBucketSize) {
+export async function selectEventBuckets(
+   bucketSize: EventBucketSize,
+   offset?: string,
+) {
    const config = eventBucketConfig[bucketSize];
+   const rangeStart = offset ? config.startFromOffset : config.start;
 
    return selectRows<EventBucket>(
       `
+         WITH
+            ${rangeStart} AS rangeStart,
+            ${config.rangeEnd} AS rangeEnd
          SELECT
             toString(bucketStart) AS bucket,
             formatDateTime(bucketStart, '${config.label}') AS label,
-            warnings,
-            errors
+            ifNull(warnings, 0) AS warnings,
+            ifNull(errors, 0) AS errors
          FROM (
             SELECT
                ${config.bucket} AS bucketStart,
@@ -178,10 +204,17 @@ export async function selectEventBuckets(bucketSize: EventBucketSize) {
                countIf(type = 'error') AS errors
             FROM eoc.log_events
             WHERE type IN ('warning', 'error')
-               AND timestamp >= ${config.since}
+               AND timestamp >= rangeStart
+               AND timestamp < rangeEnd
             GROUP BY bucketStart
+            ORDER BY bucketStart
+            WITH FILL
+               FROM rangeStart
+               TO rangeEnd
+               STEP ${config.step}
          )
          ORDER BY bucketStart ASC
       `,
+      offset ? { offset } : undefined,
    );
 }

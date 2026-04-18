@@ -3,7 +3,7 @@ import { NavLink } from "~/component/nav-link";
 export default function DashboardLayout(props: React.PropsWithChildren) {
    return (
       <>
-         <aside className="w-56 flex flex-col gap-2 p-2 text-lg border-r-1 border-r-white/15">
+         <aside className="w-40 flex flex-col gap-2 p-2 text-lg border-r-1 border-r-white/15">
             <NavLink
                href="/"
                className="aria-[current=page]:bg-sc p-2 duration-200 font-semibold rounded-lg"

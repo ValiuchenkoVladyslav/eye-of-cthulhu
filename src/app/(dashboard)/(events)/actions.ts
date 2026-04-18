@@ -14,10 +14,13 @@ export async function getRecentIncidents() {
    return selectIncidents();
 }
 
-export async function getEventBuckets(bucketSize: EventBucketSize) {
+export async function getEventBuckets(
+   bucketSize: EventBucketSize,
+   offset?: string,
+) {
    await userAuth();
 
-   return selectEventBuckets(bucketSize);
+   return selectEventBuckets(bucketSize, offset);
 }
 
 export async function getProcessLogs(process: string) {

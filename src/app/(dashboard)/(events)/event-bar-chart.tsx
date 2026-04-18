@@ -27,13 +27,30 @@ export function EventBarChart(props: {
       const nextSearchParams = new URLSearchParams(searchParams.toString());
 
       nextSearchParams.set("bucket", nextBucketSize);
+      nextSearchParams.delete("offset");
+
+      router.replace(`${pathname}?${nextSearchParams.toString()}`);
+   }
+
+   function drillDown(bucket: string | undefined) {
+      if (!bucket || props.bucketSize === "hour") {
+         return;
+      }
+
+      const nextSearchParams = new URLSearchParams(searchParams.toString());
+
+      nextSearchParams.set("offset", bucket);
+      nextSearchParams.set(
+         "bucket",
+         props.bucketSize === "week" ? "day" : "hour",
+      );
 
       router.replace(`${pathname}?${nextSearchParams.toString()}`);
    }
 
    return (
       <div className="bg-sc rounded-xl flex flex-col gap-4 w-full p-3">
-         <div className="flex gap-2">
+         <header className="flex gap-2">
             <div className="bg-bg rounded-md px-3 py-2">
                <select
                   className="bg-bg"
@@ -61,7 +78,7 @@ export function EventBarChart(props: {
                   <option value="error">Errors</option>
                </select>
             </div>
-         </div>
+         </header>
 
          {data.length === 0 && <p>No events.</p>}
 
@@ -89,6 +106,12 @@ export function EventBarChart(props: {
                            stackId="events"
                            fill={eventTypeColor.error}
                            radius={eventType === "error" ? [4, 4, 0, 0] : 0}
+                           cursor={
+                              props.bucketSize === "hour"
+                                 ? "default"
+                                 : "pointer"
+                           }
+                           onClick={(state) => drillDown(state.payload?.bucket)}
                         />
                      )}
 
@@ -98,6 +121,12 @@ export function EventBarChart(props: {
                            stackId="events"
                            fill={eventTypeColor.warning}
                            radius={[4, 4, 0, 0]}
+                           cursor={
+                              props.bucketSize === "hour"
+                                 ? "default"
+                                 : "pointer"
+                           }
+                           onClick={(state) => drillDown(state.payload?.bucket)}
                         />
                      )}
                   </BarChart>
