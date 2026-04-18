@@ -13,14 +13,12 @@
       "prepare": "husky"
    },
    "dependencies": {
-      "@noble/ciphers": "^2.2.0",
+      "@clickhouse/client": "^1.18.2",
       "@orpc/server": "^1.13.14",
-      "@vercel/functions": "^3.4.3",
-      "drizzle-orm": "^0.45.2",
       "next": "16.2.3",
-      "pg": "^8.20.0",
       "react": "19.2.5",
       "react-dom": "19.2.5",
+      "recharts": "^3.8.1",
       "zod": "^4.3.6"
    },
    "devDependencies": {
