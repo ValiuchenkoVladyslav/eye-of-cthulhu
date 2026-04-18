@@ -1,15 +1,15 @@
 import "server-only";
 
-import { hex, object, url } from "zod/v4";
+import { hex, object, string, url } from "zod/v4";
 
 const envSchema = object({
    ROOT_INVITE: hex(),
 
-   AUTH_SK: hex()
-      .transform(Uint8Array.fromHex)
-      .refine((val) => val.length === 32),
+   DB_URL: string(),
 
-   DB_URL: url(),
+   CH_URL: url(),
+   CH_USER: string(),
+   CH_PASSWORD: string(),
 });
 
 export const env = Object.freeze(envSchema.parse(process.env));

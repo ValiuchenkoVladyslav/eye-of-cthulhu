@@ -1,15 +1,8 @@
+import "server-only";
+
 import type { RouterClient } from "@orpc/server";
-import { pos } from "~/auth";
-import { activityEvents, db } from "~/db";
+// import { pos } from "~/auth";
 
-export const getEvents = pos.handler(async () => {
-   const events = await db.select().from(activityEvents);
-
-   return events;
-});
-
-export const router = {
-   getEvents,
-};
+export const router = {};
 
 export type Router = RouterClient<typeof router>;
