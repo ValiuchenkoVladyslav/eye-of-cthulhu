@@ -1,10 +1,10 @@
 "use client";
 
-import { useAction } from "~/hook/use-action";
+import { useFormAction } from "~/hook/use-form-action";
 import { signUp } from "./action";
 
 export default function SignUp() {
-   const [submit, err] = useAction(signUp);
+   const [submit, err] = useFormAction(signUp);
 
    return (
       <form onSubmit={submit} className="flex flex-col gap-2">
