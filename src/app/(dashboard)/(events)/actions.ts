@@ -5,6 +5,7 @@ import {
    type EventBucketSize,
    selectEventBuckets,
    selectIncidents,
+   selectProcessLogs,
 } from "~/db/ch";
 
 export async function getRecentIncidents() {
@@ -17,4 +18,10 @@ export async function getEventBuckets(bucketSize: EventBucketSize) {
    await userAuth();
 
    return selectEventBuckets(bucketSize);
+}
+
+export async function getProcessLogs(process: string) {
+   await userAuth();
+
+   return selectProcessLogs(process);
 }
