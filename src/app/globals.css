@@ -1,7 +1,22 @@
 @import "tailwindcss";
 
+@theme {
+   --color-bg: #1e1f20;
+   --color-fg: #e3e3e3;
+   --color-sc: #131314;
+}
+
 @layer base {
    button {
       cursor: pointer;
+   }
+
+   * {
+      scrollbar-color: color-mix(in srgb, var(--color-fg) 30%, transparent)
+         transparent;
+   }
+
+   h1 {
+      @apply font-semibold text-xl;
    }
 }

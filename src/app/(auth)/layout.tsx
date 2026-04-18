@@ -2,7 +2,7 @@ import { NavLink } from "~/component/nav-link";
 
 export default function AuthLayout(props: React.PropsWithChildren) {
    return (
-      <div className="mx-auto mt-64 bg-black/90 text-white w-86 rounded-xl">
+      <div className="mx-auto mt-64 h-fit bg-black/90 text-white w-86 rounded-xl">
          <nav className="flex gap-2 p-3 font-semibold">
             <NavLink
                href="/sign-in"
