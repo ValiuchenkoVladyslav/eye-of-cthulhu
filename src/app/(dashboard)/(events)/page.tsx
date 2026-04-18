@@ -57,7 +57,9 @@ async function IncidentsWorkspace(props: {
                   logs={getProcessLogs(selectedProcess)}
                />
             ) : (
-               <p>Select an incident to open process logs.</p>
+               <p className="m-3 opacity-75">
+                  Select an incident to open process logs.
+               </p>
             )}
          </aside>
       </div>
