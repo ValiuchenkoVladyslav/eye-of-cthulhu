@@ -38,7 +38,7 @@ export function migrateDb() {
       CREATE TABLE IF NOT EXISTS Service (
          id INTEGER PRIMARY KEY AUTOINCREMENT,
          name TEXT NOT NULL,
-         ingestToken TEXT NOT NULL UNIQUE,
+         ingestToken TEXT NOT NULL UNIQUE
       ) STRICT;
    `);
 }
