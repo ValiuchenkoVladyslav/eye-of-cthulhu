@@ -26,5 +26,6 @@ jobs:
       - name: Check linting
         run: bun biome check
 
+      # https://github.com/vercel/next.js/discussions/46544
       - name: Check compile
-        run: bun --bun next build
+        run: bun --bun next build --experimental-build-mode compile

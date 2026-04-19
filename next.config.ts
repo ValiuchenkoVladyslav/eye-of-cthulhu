@@ -3,14 +3,6 @@ import type { NextConfig } from "next";
 export default {
    output: "standalone",
 
-   cacheComponents: true,
-   experimental: {
-      authInterrupts: true,
-      staleTimes: {
-         dynamic: 180,
-      },
-   },
-
    // https://github.com/vercel/next.js/discussions/64330
    turbopack: {
       resolveAlias: {
