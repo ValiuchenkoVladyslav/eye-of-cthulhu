@@ -1,0 +1,50 @@
+version: "3.9"
+
+volumes:
+  sqlite_data:
+  clickhouse_data:
+
+networks:
+  eoc_network:
+    driver: bridge
+
+services:
+  eoc-dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    container_name: eoc-dashboard
+    restart: unless-stopped
+
+    depends_on: [clickhouse]
+
+    environment:
+      ROOT_INVITE: ${ROOT_INVITE}
+      DB_URL: ${DB_URL}
+      SITE_ORIGIN: ${SITE_ORIGIN}
+      CH_URL: ${CH_URL}
+      CH_USER: ${CH_USER}
+      CH_PASSWORD: ${CH_PASSWORD}
+
+    volumes: [sqlite_data:/data]
+
+    ports: [3000:3000]
+
+    networks: [eoc_network]
+
+  clickhouse:
+    image: docker.io/clickhouse/clickhouse-server:latest
+    container_name: clickhouse
+    restart: unless-stopped
+
+    environment:
+      CLICKHOUSE_USER: ${CH_USER}
+      CLICKHOUSE_PASSWORD: ${CH_PASSWORD}
+      CLICKHOUSE_DB: default
+
+    volumes: [clickhouse_data:/var/lib/clickhouse]
+
+    ports: [8123:8123, 9000:9000]
+
+    networks: [eoc_network]
