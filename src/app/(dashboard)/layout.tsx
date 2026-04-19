@@ -11,6 +11,12 @@ export default function DashboardLayout(props: React.PropsWithChildren) {
                Events
             </NavLink>
             <NavLink
+               href="/services"
+               className="aria-[current=page]:bg-sc p-2 duration-200 font-semibold rounded-lg"
+            >
+               Services
+            </NavLink>
+            <NavLink
                href="/team"
                className="aria-[current=page]:bg-sc p-2 duration-200 font-semibold rounded-lg"
             >

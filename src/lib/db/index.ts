@@ -40,6 +40,15 @@ export function migrateDb() {
          name TEXT NOT NULL,
          ingestToken TEXT NOT NULL UNIQUE
       ) STRICT;
+
+      CREATE TABLE IF NOT EXISTS ServiceWebhook (
+         id INTEGER PRIMARY KEY AUTOINCREMENT,
+         serviceId INTEGER NOT NULL,
+         url TEXT NOT NULL,
+         headersJson TEXT NOT NULL,
+
+         FOREIGN KEY (serviceId) REFERENCES Service(id) ON DELETE CASCADE
+      ) STRICT;
    `);
 }
 
@@ -135,18 +144,32 @@ export class Service {
    name!: string;
    ingestToken!: string;
 
-   static insert(service: Omit<Service, "id">) {
-      const hashed = blake.update(service.ingestToken).digest("hex");
+   static insert(service: Omit<Service, "id" | "ingestToken">) {
+      const ingestToken = crypto.getRandomValues(new Uint8Array(32));
 
-      return db
+      const hashed = blake.update(ingestToken).digest("hex");
+
+      const res = db
          .query(
             "INSERT INTO Service (name, ingestToken) VALUES (?, ?) RETURNING *",
          )
          .as(Service)
-         .get(service.name, hashed);
+         .get(service.name, hashed) as Service;
+
+      return {
+         ...res,
+         ingestToken: ingestToken.toHex(),
+      };
    }
 
-   static getById(id: string) {
+   static getAll() {
+      return db
+         .query("SELECT * FROM Service ORDER BY name ASC, id ASC")
+         .as(Service)
+         .all();
+   }
+
+   static getById(id: number) {
       return db.query("SELECT * FROM Service WHERE id = ?").as(Service).get(id);
    }
 
@@ -159,7 +182,36 @@ export class Service {
          .get(hashed);
    }
 
-   static delete(id: string) {
+   static delete(id: number) {
       return db.prepare("DELETE FROM Service WHERE id = ?").run(id);
+   }
+}
+
+export class ServiceWebhook {
+   id!: number;
+   serviceId!: number;
+   url!: string;
+   headersJson!: string;
+
+   static insert(webhook: Omit<ServiceWebhook, "id">) {
+      return db
+         .query(
+            "INSERT INTO ServiceWebhook (serviceId, url, headersJson) VALUES (?, ?, ?) RETURNING *",
+         )
+         .as(ServiceWebhook)
+         .get(webhook.serviceId, webhook.url, webhook.headersJson);
+   }
+
+   static getByServiceId(serviceId: number) {
+      return db
+         .query(
+            "SELECT * FROM ServiceWebhook WHERE serviceId = ? ORDER BY id DESC",
+         )
+         .as(ServiceWebhook)
+         .all(serviceId);
+   }
+
+   static delete(id: number) {
+      return db.prepare("DELETE FROM ServiceWebhook WHERE id = ?").run(id);
    }
 }
