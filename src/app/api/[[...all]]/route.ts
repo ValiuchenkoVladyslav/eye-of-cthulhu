@@ -1,9 +1,9 @@
+import { OpenAPIHandler } from "@orpc/openapi/fetch";
 import { onError } from "@orpc/server";
-import { RPCHandler } from "@orpc/server/fetch";
 
 import { router } from "./router";
 
-const handler = new RPCHandler(router, {
+const handler = new OpenAPIHandler(router, {
    interceptors: [
       onError((error) => {
          console.error(error);

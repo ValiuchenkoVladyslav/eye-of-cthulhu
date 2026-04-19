@@ -103,6 +103,20 @@ async function selectRows<T>(
    return result.json<T>();
 }
 
+export async function insertLogEvents(events: LogEvent[]) {
+   if (events.length === 0) {
+      return { inserted: 0 };
+   }
+
+   await ch.insert({
+      table: "eoc.log_events",
+      format: "JSONEachRow",
+      values: events,
+   });
+
+   return { inserted: events.length };
+}
+
 export async function migrateCh() {
    await ch.command({ query: "CREATE DATABASE IF NOT EXISTS eoc" });
 

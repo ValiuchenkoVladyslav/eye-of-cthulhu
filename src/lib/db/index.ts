@@ -34,6 +34,12 @@ export function migrateDb() {
 
          FOREIGN KEY (userId) REFERENCES User(id) ON DELETE CASCADE
       ) STRICT, WITHOUT ROWID;
+
+      CREATE TABLE IF NOT EXISTS Service (
+         id INTEGER PRIMARY KEY AUTOINCREMENT,
+         name TEXT NOT NULL,
+         ingestToken TEXT NOT NULL UNIQUE,
+      ) STRICT;
    `);
 }
 
@@ -117,5 +123,35 @@ export class Session {
 
    static delete(id: string) {
       return db.prepare("DELETE FROM Session WHERE id = ?").run(id);
+   }
+}
+
+export class Service {
+   id!: number;
+   name!: string;
+   ingestToken!: string;
+
+   static insert(service: Omit<Service, "id">) {
+      return db
+         .query(
+            "INSERT INTO Service (name, ingestToken) VALUES (?, ?) RETURNING *",
+         )
+         .as(Service)
+         .get(service.name, service.ingestToken);
+   }
+
+   static getById(id: string) {
+      return db.query("SELECT * FROM Service WHERE id = ?").as(Service).get(id);
+   }
+
+   static getByIngestToken(token: string) {
+      return db
+         .query("SELECT * FROM Service WHERE ingestToken = ?")
+         .as(Service)
+         .get(token);
+   }
+
+   static delete(id: string) {
+      return db.prepare("DELETE FROM Service WHERE id = ?").run(id);
    }
 }
