@@ -3,7 +3,38 @@ import "server-only";
 import type { RouterClient } from "@orpc/server";
 import { array, int, object, string, enum as zEnum } from "zod/v4";
 import { pos } from "~/auth";
+import { ServiceWebhook } from "~/db";
 import { insertLogEvents } from "~/db/ch";
+import { env } from "~/env";
+
+type ServiceWebhookHeader = {
+   key: string;
+   value: string;
+};
+
+async function notifyWebhook(webhook: ServiceWebhook, process: string) {
+   const url = new URL(env.SITE_ORIGIN);
+   url.searchParams.set("process", process);
+
+   const headers = JSON.parse(webhook.headersJson) as ServiceWebhookHeader[];
+
+   const response = await fetch(webhook.url, {
+      method: "POST",
+      headers: {
+         "Content-Type": "text/plain",
+         ...Object.fromEntries(
+            headers.map((header) => [header.key, header.value]),
+         ),
+      },
+      body: url.toString(),
+   });
+
+   if (!response.ok) {
+      throw new Error(
+         `Webhook responded with status ${response.status} for ${webhook.url}`,
+      );
+   }
+}
 
 const IngestLogEventsInputSchema = array(
    object({
@@ -46,12 +77,43 @@ export const ingestLogEvents = pos
    .input(IngestLogEventsInputSchema)
    .output(IngestLogEventsOutputSchema)
    .handler(async ({ context, input }) => {
-      const events = input.map((event) => ({
-         ...event,
-         source: context.service.name,
-      }));
+      const result = await insertLogEvents(
+         input.map((event) => ({
+            ...event,
+            source: context.service.name,
+         })),
+      );
 
-      const result = await insertLogEvents(events);
+      const notifyingProcesses = new Set(
+         input
+            .filter((evt) => evt.type === "warning" || evt.type === "error")
+            .map((evt) => evt.process),
+      );
+
+      if (notifyingProcesses.size > 0) {
+         const webhooks = ServiceWebhook.getByServiceId(context.service.id);
+         const processes = [...notifyingProcesses];
+
+         await Promise.all(
+            webhooks.flatMap((webhook) =>
+               processes.map(async (process) => {
+                  try {
+                     await notifyWebhook(webhook, process);
+                  } catch (error) {
+                     console.error(
+                        "[ingestLogEvents] Failed to notify webhook",
+                        {
+                           webhookId: webhook.id,
+                           url: webhook.url,
+                           process,
+                           error,
+                        },
+                     );
+                  }
+               }),
+            ),
+         );
+      }
 
       return {
          ...result,

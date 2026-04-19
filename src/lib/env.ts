@@ -3,6 +3,8 @@ import "server-only";
 import { hex, object, string, url } from "zod/v4";
 
 const envSchema = object({
+   SITE_ORIGIN: url(),
+
    ROOT_INVITE: hex(),
 
    DB_URL: string(),
