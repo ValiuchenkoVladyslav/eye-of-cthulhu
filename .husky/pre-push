@@ -1,1 +1,1 @@
-bun run build
+bun --bun next build --experimental-build-mode compile
