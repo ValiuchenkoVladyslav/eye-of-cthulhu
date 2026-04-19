@@ -27,6 +27,7 @@ export async function userAuth() {
 
    const user = User.getById(session.userId);
    if (!user) {
+      console.error("[userAuth] Failed to get user for valid session");
       Session.delete(session.id);
       redirect("/sign-in");
    }

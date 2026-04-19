@@ -61,6 +61,8 @@ export class Invite {
    }
 }
 
+const blake = new Bun.CryptoHasher("blake2b256");
+
 export class User {
    id!: number;
    inviteCode!: string;
@@ -102,27 +104,29 @@ export class Session {
    userId!: number;
 
    static insert(session: Session) {
+      const hashed = blake.update(session.id).digest("hex");
+
       return db
          .query(
             "INSERT INTO Session (id, expiresAt, userId) VALUES (?, ?, ?) RETURNING *",
          )
          .as(Session)
-         .get(session.id, session.expiresAt, session.userId);
+         .get(hashed, session.expiresAt, session.userId);
    }
 
    static getById(id: string) {
-      return db.query("SELECT * FROM Session WHERE id = ?").as(Session).get(id);
-   }
+      const hashed = blake.update(id).digest("hex");
 
-   static getByUserId(userId: number) {
       return db
-         .query("SELECT * FROM Session WHERE userId = ?")
+         .query("SELECT * FROM Session WHERE id = ?")
          .as(Session)
-         .all(userId);
+         .get(hashed);
    }
 
    static delete(id: string) {
-      return db.prepare("DELETE FROM Session WHERE id = ?").run(id);
+      const hashed = blake.update(id).digest("hex");
+
+      return db.prepare("DELETE FROM Session WHERE id = ?").run(hashed);
    }
 }
 
@@ -132,12 +136,14 @@ export class Service {
    ingestToken!: string;
 
    static insert(service: Omit<Service, "id">) {
+      const hashed = blake.update(service.ingestToken).digest("hex");
+
       return db
          .query(
             "INSERT INTO Service (name, ingestToken) VALUES (?, ?) RETURNING *",
          )
          .as(Service)
-         .get(service.name, service.ingestToken);
+         .get(service.name, hashed);
    }
 
    static getById(id: string) {
@@ -145,10 +151,12 @@ export class Service {
    }
 
    static getByIngestToken(token: string) {
+      const hashed = blake.update(token).digest("hex");
+
       return db
          .query("SELECT * FROM Service WHERE ingestToken = ?")
          .as(Service)
-         .get(token);
+         .get(hashed);
    }
 
    static delete(id: string) {
