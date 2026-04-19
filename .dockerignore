@@ -1,0 +1,15 @@
+node_modules/
+
+.next/
+next-env.d.ts
+
+.env*
+
+.git
+.gitignore
+
+.vscode/
+
+*.db
+
+.github/
