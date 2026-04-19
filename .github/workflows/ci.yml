@@ -27,4 +27,4 @@ jobs:
         run: bun biome check
 
       - name: Check compile
-        run: bun run build
+        run: bun --bun next build
