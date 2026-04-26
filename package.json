@@ -14,7 +14,7 @@
    },
    "dependencies": {
       "@clickhouse/client": "^1.18.3",
-      "@orpc/openapi": "^1.13.14",
+      "@orpc/openapi": "^1.14.0",
       "@orpc/server": "^1.14.0",
       "@orpc/zod": "^1.13.14",
       "next": "16.2.4",
