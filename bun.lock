@@ -5,7 +5,7 @@
     "": {
       "name": "eye-of-cthulhu",
       "dependencies": {
-        "@clickhouse/client": "^1.18.2",
+        "@clickhouse/client": "^1.18.3",
         "@orpc/openapi": "^1.13.14",
         "@orpc/server": "^1.13.14",
         "@orpc/zod": "^1.13.14",
@@ -51,9 +51,9 @@
 
     "@biomejs/cli-win32-x64": ["@biomejs/cli-win32-x64@2.4.11", "", { "os": "win32", "cpu": "x64" }, "sha512-A8D3JM/00C2KQgUV3oj8Ba15EHEYwebAGCy5Sf9GAjr5Y3+kJIYOiESoqRDeuRZueuMdCsbLZIUqmPhpYXJE9A=="],
 
-    "@clickhouse/client": ["@clickhouse/client@1.18.2", "", { "dependencies": { "@clickhouse/client-common": "1.18.2" } }, "sha512-fuquQswRSHWM6D079ZeuGqkMOsqtcUPL06UdTnowmoeeYjVrqisfVmvnw8pc3OeKS4kVb91oygb/MfLDiMs0TQ=="],
+    "@clickhouse/client": ["@clickhouse/client@1.18.3", "", { "dependencies": { "@clickhouse/client-common": "1.18.3" } }, "sha512-340ngdYktL8PLUBK2QKSwe0o02tYfZSz1mSn1uXCEU8TxHvwh9pnQxElf9YHumDGj5gX/IdgxPsJTGMs82Hgug=="],
 
-    "@clickhouse/client-common": ["@clickhouse/client-common@1.18.2", "", {}, "sha512-J0SG6q9V31ydxonglpj9xhNRsUxCsF71iEZ784yldqMYwsHixj/9xHFDgBDX3DuMiDx/kPDfXnf+pimp08wIBA=="],
+    "@clickhouse/client-common": ["@clickhouse/client-common@1.18.3", "", {}, "sha512-3axzO3zvrsGT5PzDenxgWscltYCNRDbhaHWUgdsmcM9OnW/VnZn9EarOcZogr9P82Z0mQh+Jd2x+p2K4TFD2fA=="],
 
     "@emnapi/runtime": ["@emnapi/runtime@1.9.2", "", { "dependencies": { "tslib": "^2.4.0" } }, "sha512-3U4+MIWHImeyu1wnmVygh5WlgfYDtyf0k8AbLhMFxOipihf6nrWC4syIm/SwEeec0mNSafiiNnMJwbza/Is6Lw=="],
 

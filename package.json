@@ -13,7 +13,7 @@
       "prepare": "husky"
    },
    "dependencies": {
-      "@clickhouse/client": "^1.18.2",
+      "@clickhouse/client": "^1.18.3",
       "@orpc/openapi": "^1.13.14",
       "@orpc/server": "^1.13.14",
       "@orpc/zod": "^1.13.14",
