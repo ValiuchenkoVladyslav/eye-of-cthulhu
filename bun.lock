@@ -13,7 +13,7 @@
         "react": "19.2.5",
         "react-dom": "19.2.5",
         "recharts": "^3.8.1",
-        "zod": "^4.3.6",
+        "zod": "^4.4.2",
       },
       "devDependencies": {
         "@biomejs/biome": "2.4.11",
@@ -377,7 +377,7 @@
 
     "wildcard-match": ["wildcard-match@5.1.4", "", {}, "sha512-wldeCaczs8XXq7hj+5d/F38JE2r7EXgb6WQDM84RVwxy81T/sxB5e9+uZLK9Q9oNz1mlvjut+QtvgaOQFPVq/g=="],
 
-    "zod": ["zod@4.3.6", "", {}, "sha512-rftlrkhHZOcjDwkGlnUtZZkvaPHCsDATp4pGpuOOMDaTdDDXF91wuVDJoWoPsKX/3YPQ5fHuF3STjcYyKr+Qhg=="],
+    "zod": ["zod@4.4.2", "", {}, "sha512-IynmDyxsEsb9RKzO3J9+4SxXnl2FTFSzNBaKKaMV6tsSk0rw9gYw9gs+JFCq/qk2LCZ78KDwyj+Z289TijSkUw=="],
 
     "@orpc/client/@orpc/standard-server-fetch": ["@orpc/standard-server-fetch@1.13.14", "", { "dependencies": { "@orpc/shared": "1.13.14", "@orpc/standard-server": "1.13.14" } }, "sha512-k2zkCi98qd3NkvWhUX/Yece/qjB+o07g/gHC509YB5HbOGtBV/da3eseYjFyzBx5LDxMz28BOALI8/q/YDhKZw=="],
 
